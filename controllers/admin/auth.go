@@ -18,8 +18,8 @@ func Login(c echo.Context) error {
 	}
 
 	if reqbody.Username == os.Getenv("ADMIN_USERNAME") && reqbody.Password == os.Getenv("ADMIN_PASSWORD") {
-		return c.String(200, "Correct login")
+		return c.String(200, "Valid login")
 	}
 
-	return c.String(401, "Wrong login")
+	return c.String(401, "Invalid login")
 }
