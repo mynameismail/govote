@@ -54,7 +54,7 @@ func ListVoters(c echo.Context) error {
 	})
 }
 
-func CreateVoters(c echo.Context) error {
+func GenerateVoters(c echo.Context) error {
 	type Reqbody struct {
 		NumberOfVoters int    `json:"number_of_voters" form:"number_of_voters"`
 		Prefix         string `json:"prefix" form:"prefix"`
