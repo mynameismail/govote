@@ -20,19 +20,33 @@ func Login(c echo.Context) error {
 	var voter models.Voter
 	notfound := models.Conn.Where("code = ? AND status = 'init'", reqbody.Code).First(&voter).RecordNotFound()
 	if notfound {
-		return c.String(401, "Wrong login")
+		return c.String(401, "Invalid login")
 	}
 
 	voter.Status = "logged"
 	models.Conn.Save(&voter)
-	return c.String(200, "Correct login")
+
+	return c.String(200, "Valid login")
+}
+
+func ListVotes(c echo.Context) error {
+	type Response struct {
+		Message string        `json:"message"`
+		Data    []models.Vote `json:"data"`
+	}
+
+	var votes []models.Vote
+	models.Conn.Find(&votes)
+
+	return c.JSON(200, &Response{
+		Message: "Success",
+		Data:    votes,
+	})
 }
 
 func Vote(c echo.Context) error {
-	log.Println(c.Get("voter"))
-
 	type Reqbody struct {
-		ID string `json:"id" form:"id"`
+		SelectedID int `json:"selected_id" form:"selected_id"`
 	}
 
 	reqbody := new(Reqbody)
@@ -40,15 +54,16 @@ func Vote(c echo.Context) error {
 		return c.String(400, "Sorry! Bad request")
 	}
 
-	var voter models.Voter
-	notfound := models.Conn.First(&voter, 1).RecordNotFound()
+	var vote models.Vote
+	notfound := models.Conn.First(&vote, reqbody.SelectedID).RecordNotFound()
 	if notfound {
-		return c.String(401, "Wrong login")
+		return c.String(404, "Invalid selection")
 	}
 
-	log.Println(voter)
+	log.Println(vote)
 
-	// voter.Status = "voted"
-	// models.Conn.Save(&voter)
+	vote.Votes = vote.Votes + 1
+	models.Conn.Save(&vote)
+
 	return c.String(200, "Success")
 }
