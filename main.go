@@ -1,6 +1,7 @@
 package main
 
 import (
+	"govote/middlewares"
 	"govote/models"
 	"log"
 
@@ -29,14 +30,15 @@ func main() {
 
 	admin := app.Group("/api/admin")
 	admin.POST("/login", admincontroller.Login)
-	admin.GET("/votes", admincontroller.ListVotes)
-	admin.POST("/votes", admincontroller.CreateVotes)
-	admin.GET("/voters", admincontroller.ListVoters)
-	admin.POST("/voters", admincontroller.CreateVoters)
+	admin.GET("/votes", admincontroller.ListVotes, middlewares.AuthAdmin)
+	admin.POST("/votes", admincontroller.CreateVotes, middlewares.AuthAdmin)
+	admin.GET("/voters", admincontroller.ListVoters, middlewares.AuthAdmin)
+	admin.POST("/voters", admincontroller.GenerateVoters, middlewares.AuthAdmin)
 
 	voter := app.Group("/api/voter")
 	voter.POST("/login", votercontroller.Login)
-	voter.POST("/vote", votercontroller.Vote)
+	voter.GET("/votes", votercontroller.ListVotes, middlewares.AuthVoter)
+	voter.POST("/vote", votercontroller.Vote, middlewares.AuthVoter)
 
 	app.Start(":8080")
 }
