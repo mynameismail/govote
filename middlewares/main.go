@@ -25,8 +25,7 @@ var AuthVoter = middleware.KeyAuthWithConfig(middleware.KeyAuthConfig{
 			return false, nil
 		}
 
-		voter.Status = "voted"
-		models.Conn.Save(&voter)
+		c.Set("voter", voter)
 
 		return true, nil
 	},

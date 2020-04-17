@@ -22,6 +22,7 @@ func main() {
 	models.Init()
 
 	app := echo.New()
+	app.Pre(middleware.RemoveTrailingSlash())
 
 	app.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
 		Format: "${time_rfc3339} ${method} ${uri} ${status} ${latency_human}\n",
@@ -39,6 +40,10 @@ func main() {
 	voter.POST("/login", votercontroller.Login)
 	voter.GET("/votes", votercontroller.ListVotes, middlewares.AuthVoter)
 	voter.POST("/vote", votercontroller.Vote, middlewares.AuthVoter)
+
+	app.Static("/static", "ui/static")
+	app.File("/app", "ui/app.html")
+	app.File("/app/*", "ui/app.html")
 
 	app.Start(":8080")
 }

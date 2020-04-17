@@ -1,2 +1,3 @@
-govote.db
+.DS_Store
 .env
+govote.db

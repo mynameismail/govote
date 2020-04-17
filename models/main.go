@@ -11,14 +11,14 @@ import (
 
 type Vote struct {
 	gorm.Model
-	Name  string `gorm:"column:name;not null;unique"`
-	Votes int    `gorm:"column:votes;not null;default:0"`
+	Name  string `gorm:"column:name;not null;unique" json:"name"`
+	Votes int    `gorm:"column:votes;not null;default:0" json:"votes"`
 }
 
 type Voter struct {
 	gorm.Model
-	Code   string `gorm:"column:code;not null;unique"`
-	Status string `gorm:"column:status;not null;default:'init'"` // ["init", "logged", "voted"]
+	Code   string `gorm:"column:code;not null;unique" json:"code"`
+	Status string `gorm:"column:status;not null;default:'init'" json:"status"` // ["init", "logged", "voted"]
 }
 
 var Conn *gorm.DB

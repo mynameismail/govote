@@ -2,7 +2,6 @@ package voter
 
 import (
 	"govote/models"
-	"log"
 
 	"github.com/labstack/echo/v4"
 )
@@ -60,10 +59,12 @@ func Vote(c echo.Context) error {
 		return c.String(404, "Invalid selection")
 	}
 
-	log.Println(vote)
-
 	vote.Votes = vote.Votes + 1
 	models.Conn.Save(&vote)
+
+	voter := c.Get("voter").(models.Voter)
+	voter.Status = "voted"
+	models.Conn.Save(&voter)
 
 	return c.String(200, "Success")
 }

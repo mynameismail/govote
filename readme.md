@@ -9,7 +9,8 @@ Simple vote app with gin and vue
 5. Make sure Golang is installed ```go version```. It shows the version if installed
 
 ## Run in local
-Run ```go run main.go```
+1. Run ```go run main.go```
+2. Open browser and visit http://localhost:8080/admin for admin and http://localhost:8080/app for voter
 
 ## Deploy
 Maybe next time
