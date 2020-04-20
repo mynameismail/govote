@@ -32,9 +32,9 @@ func main() {
 	admin := app.Group("/api/admin")
 	admin.POST("/login", admincontroller.Login)
 	admin.GET("/votes", admincontroller.ListVotes, middlewares.AuthAdmin)
-	admin.POST("/votes", admincontroller.CreateVotes, middlewares.AuthAdmin)
 	admin.GET("/voters", admincontroller.ListVoters, middlewares.AuthAdmin)
-	admin.POST("/voters", admincontroller.GenerateVoters, middlewares.AuthAdmin)
+	admin.POST("/create", admincontroller.CreateVoting, middlewares.AuthAdmin)
+	admin.POST("/reset", admincontroller.ResetVoting, middlewares.AuthAdmin)
 
 	voter := app.Group("/api/voter")
 	voter.POST("/login", votercontroller.Login)
@@ -42,6 +42,8 @@ func main() {
 	voter.POST("/vote", votercontroller.Vote, middlewares.AuthVoter)
 
 	app.Static("/static", "ui/static")
+	app.File("/admin", "ui/admin.html")
+	app.File("/admin/*", "ui/admin.html")
 	app.File("/app", "ui/app.html")
 	app.File("/app/*", "ui/app.html")
 
