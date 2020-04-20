@@ -9,14 +9,20 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
 
+type CustomGormModel struct {
+	ID        uint      `gorm:"column:id;primary_key" json:"id"`
+	CreatedAt time.Time `gorm:"column:created_at" json:"created_at"`
+	UpdatedAt time.Time `gorm:"column:updated_at" json:"updated_at"`
+}
+
 type Vote struct {
-	gorm.Model
+	CustomGormModel
 	Name  string `gorm:"column:name;not null;unique" json:"name"`
 	Votes int    `gorm:"column:votes;not null;default:0" json:"votes"`
 }
 
 type Voter struct {
-	gorm.Model
+	CustomGormModel
 	Code   string `gorm:"column:code;not null;unique" json:"code"`
 	Status string `gorm:"column:status;not null;default:'init'" json:"status"` // ["init", "logged", "voted"]
 }
