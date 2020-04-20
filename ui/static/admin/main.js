@@ -6,11 +6,11 @@ const routes = [
   },
   {
     path: '/',
-    name: 'voting',
-    component: Voting,
+    name: 'home',
+    component: Home,
     beforeEnter: (to, from, next) => {
-      let voterCode = localStorage.getItem('voter-code')
-      if (!voterCode) {
+      let basicAuth = localStorage.getItem('basic-auth')
+      if (!basicAuth) {
         next({ path: '/login' })
       } else {
         next()
@@ -21,7 +21,7 @@ const routes = [
 
 const router = new VueRouter({
   mode: 'history',
-  base: '/app',
+  base: '/admin',
   routes: routes
 })
 

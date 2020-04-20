@@ -1,4 +1,4 @@
-const Home = {
+const Voting = {
   template: '#voting-page',
   data: () => ({
     votes: [],
@@ -43,6 +43,7 @@ const Home = {
 
         if (response.status == 200) {
           localStorage.removeItem('voter-code')
+          UIkit.modal('#modal-vote').hide()
           // go to thankyou
           this.$router.push('/login')
         } else {

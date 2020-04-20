@@ -1,23 +1,25 @@
 const Login = {
   template: '#login-page',
   data: () => ({
-    code: ''
+    username: '',
+    password: ''
   }),
   methods: {
     doLogin: async function() {
-      let response = await fetch('/api/voter/login', {
+      let response = await fetch('/api/admin/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          'code': this.code
+          'username': this.username,
+          'password': this.password
         })
       })
       
       if (response.status == 200) {
-        let voterCode = this.code
-        localStorage.setItem('voter-code', voterCode)
+        let basicAuth = btoa(`${this.username}:${this.password}`)
+        localStorage.setItem('basic-auth', basicAuth)
         this.$router.push('/')
       } else if (response.status == 401) {
         UIkit.notification({
