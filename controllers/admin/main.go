@@ -21,24 +21,6 @@ func ListVotes(c echo.Context) error {
 	})
 }
 
-func CreateVotes(c echo.Context) error {
-	type Reqbody struct {
-		Names []string `json:"names" form:"names"`
-	}
-
-	reqbody := new(Reqbody)
-	if c.Bind(reqbody) != nil {
-		return c.String(400, "Sorry! Bad request")
-	}
-
-	for _, name := range reqbody.Names {
-		vote := models.Vote{Name: name}
-		models.Conn.Create(&vote)
-	}
-
-	return c.String(200, "Success")
-}
-
 func ListVoters(c echo.Context) error {
 	type Response struct {
 		Message string         `json:"message"`
@@ -54,15 +36,24 @@ func ListVoters(c echo.Context) error {
 	})
 }
 
-func GenerateVoters(c echo.Context) error {
+func CreateVoting(c echo.Context) error {
 	type Reqbody struct {
-		NumberOfVoters int    `json:"number_of_voters" form:"number_of_voters"`
-		Prefix         string `json:"prefix" form:"prefix"`
+		Names          []string `json:"names" form:"names"`
+		NumberOfVoters int      `json:"number_of_voters" form:"number_of_voters"`
+		Prefix         string   `json:"prefix" form:"prefix"`
 	}
 
 	reqbody := new(Reqbody)
-	if c.Bind(reqbody) != nil {
+	err := c.Bind(reqbody)
+	if err != nil || len(reqbody.Names) < 1 || reqbody.NumberOfVoters < 1 || reqbody.Prefix == "" {
 		return c.String(400, "Sorry! Bad request")
+	}
+
+	for _, name := range reqbody.Names {
+		if name != "" {
+			vote := models.Vote{Name: name}
+			models.Conn.Create(&vote)
+		}
 	}
 
 	prefix := reqbody.Prefix
@@ -71,6 +62,15 @@ func GenerateVoters(c echo.Context) error {
 		voter := models.Voter{Code: code}
 		models.Conn.Create(&voter)
 	}
+
+	return c.String(200, "Success")
+}
+
+func ResetVoting(c echo.Context) error {
+	var votes models.Vote
+	var voters models.Voter
+	models.Conn.Delete(&votes)
+	models.Conn.Delete(&voters)
 
 	return c.String(200, "Success")
 }
