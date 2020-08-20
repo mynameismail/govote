@@ -132,7 +132,7 @@
                     </div>
                     <div class="uk-card-body">
                       <h3 class="uk-card-title">{{ vote.name }}</h3>
-                      <p><strong>{{ (vote.votes * 100 / validVotes).toFixed(2) }}%</strong> ({{ vote.votes }})</p>
+                      <p><strong>{{ vote.votes > 0 ? (vote.votes * 100 / validVotes).toFixed(2) : 0 }}%</strong> ({{ vote.votes }})</p>
                     </div>
                   </div>
                 </div>
