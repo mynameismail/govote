@@ -1,5 +1,5 @@
 # Govote
-Simple vote app with gin and vue
+Simple vote app with golang (echo) and vue.js
 
 ## Installation (use terminal or command prompt)
 1. Clone the project ```git clone https://github.com/mynameismail/govote.git```
